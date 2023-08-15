@@ -26,8 +26,50 @@ internal class Program
         Console.Clear();
 
         Console.WriteLine($"Como posso ajudar {pessoa.Nome}?");
+        Menu();
         Console.ReadKey();
-        
+
         return pessoa;
+    }
+
+    private static void Menu()
+    {
+        int variavel = 0;
+        Console.WriteLine("| ------------------------------------ |");
+        Console.WriteLine("|           1 - Deposito               |");
+        Console.WriteLine("|           2 - Saque                  |");
+        Console.WriteLine("|           3 - Sair                   |");
+        Console.WriteLine("| ------------------------------------ |");
+        string opcaoMenu = Console.ReadLine();
+
+        if (int.TryParse(opcaoMenu, out variavel))
+        {
+            switch (int.Parse(opcaoMenu))
+            {
+                case 1:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(" 1 - Deposito");
+                    break;
+                case 2:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(" 2 - Saque");
+                    break;
+                case 3:
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.Clear();
+                    Menu();
+                    break;
+            }
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.Clear();
+            Menu();
+        }
+
+
     }
 }
