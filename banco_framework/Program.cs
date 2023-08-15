@@ -1,4 +1,5 @@
-﻿using Domain.Model;
+﻿using Application;
+using Domain.Model;
 
 internal class Program
 {
@@ -8,31 +9,34 @@ internal class Program
         Console.WriteLine("Seja bem vindo ao banco Framework");
         Console.WriteLine("Por favor, identifique-se");
         Console.WriteLine("");
-        var pessoa = Identificacao();
+        var cliente = Identificacao();
     }
 
     static Pessoa Identificacao()
     {
-        var pessoa = new Pessoa();
+        var cliente = new Cliente();
 
         Console.WriteLine("Seu número de identificação:");
-        pessoa.Id = int.Parse(Console.ReadLine());
+        cliente.Id = int.Parse(Console.ReadLine());
 
         Console.WriteLine("Seu nome:");
-        pessoa.Nome = Console.ReadLine();
+        cliente.Nome = Console.ReadLine();
 
         Console.WriteLine("Seu CPF:");
-        pessoa.Cpf = Console.ReadLine();
+        cliente.Cpf = Console.ReadLine();
+
+        Console.WriteLine("Seu Saldo:");
+        cliente.Saldo = float.Parse(Console.ReadLine());
         Console.Clear();
 
-        Console.WriteLine($"Como posso ajudar {pessoa.Nome}?");
-        Menu();
+        Console.WriteLine($"Como posso ajudar {cliente.Nome}?");
+        Menu(cliente);
         Console.ReadKey();
 
-        return pessoa;
+        return cliente;
     }
 
-    private static void Menu()
+    private static void Menu(Cliente cliente)
     {
         int variavel = 0;
         Console.WriteLine("| ------------------------------------ |");
@@ -47,19 +51,17 @@ internal class Program
             switch (int.Parse(opcaoMenu))
             {
                 case 1:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine(" 1 - Deposito");
+                    Deposito(cliente);
                     break;
                 case 2:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine(" 2 - Saque");
+                    Saque(cliente);
                     break;
                 case 3:
                     Environment.Exit(0);
                     break;
                 default:
                     Console.Clear();
-                    Menu();
+                    Menu(cliente);
                     break;
             }
             Console.ResetColor();
@@ -67,9 +69,46 @@ internal class Program
         else
         {
             Console.Clear();
-            Menu();
+            Menu(cliente);
         }
+    }
+
+    private static void Deposito(Cliente cliente)
+    {
+        Console.Clear();
+        Console.WriteLine("| ------------------------------------ |");
+        Console.WriteLine("|           1 - Deposito               |");
+        Console.WriteLine("|       Digite o valor do deposito:    |");
+        Console.WriteLine("| ------------------------------------ |");
+        float valorDeposito = float.Parse(Console.ReadLine());
+        Console.Clear();
+
+        cliente.Saldo = Calculo.Soma(cliente.Saldo, valorDeposito);
+        ApresentarSaldo(cliente);
+    }
 
 
+    private static void Saque(Cliente cliente)
+    {
+        Console.Clear();
+        Console.WriteLine("| ------------------------------------ |");
+        Console.WriteLine("|           2 - Saque                  |");
+        Console.WriteLine("|       Digite o valor do Saque:       |");
+        Console.WriteLine("| ------------------------------------ |");
+        float valorSaque = float.Parse(Console.ReadLine());
+        Console.Clear();
+
+        cliente.Saldo = Calculo.Subtracao(cliente.Saldo, valorSaque);
+        ApresentarSaldo(cliente);
+    }
+
+    private static void ApresentarSaldo(Cliente cliente)
+    {
+        Console.WriteLine("| ------------------------------------ |");
+        Console.WriteLine("|            Saldo Atual:              |");
+        Console.WriteLine($"|              R${cliente.Saldo}                   |");
+        Console.WriteLine("| ------------------------------------ |");
+
+        Menu(cliente);
     }
 }
