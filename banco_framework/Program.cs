@@ -1,4 +1,5 @@
 ﻿using Application;
+using CpfCnpjLibrary;
 using Domain.Model;
 
 internal class Program
@@ -9,29 +10,35 @@ internal class Program
         Console.WriteLine("Seja bem vindo ao banco Framework");
         Console.WriteLine("Por favor, identifique-se");
         Console.WriteLine("");
-        var cliente = Identificacao();
+        Identificacao();
     }
 
     static Pessoa Identificacao()
     {
         var cliente = new Cliente();
 
-        Console.WriteLine("Seu número de identificação:");
-        cliente.Id = int.Parse(Console.ReadLine());
+        do
+        {
+            InformacoesCadastro(cliente);
 
-        Console.WriteLine("Seu nome:");
-        cliente.Nome = Console.ReadLine();
+            if (cliente.Validacoes.Count > 0 )
+            {
+                Console.Clear();
+                foreach (var item in cliente.Validacoes)
+                {
+                    Console.WriteLine(item);
+                    Console.WriteLine("");
+                }
+                Console.ReadKey();
+                Console.Clear();
+            }
 
-        Console.WriteLine("Seu CPF:");
-        cliente.Cpf = Console.ReadLine();
-
-        Console.WriteLine("Seu Saldo:");
-        cliente.Saldo = float.Parse(Console.ReadLine());
-        Console.Clear();
-
-        Console.WriteLine($"Como posso ajudar {cliente.Nome}?");
-        Menu(cliente);
-        Console.ReadKey();
+        } while (cliente.Validacoes.Count > 0);
+          
+        
+       
+            Console.WriteLine($"Como posso ajudar {cliente.Nome}?");
+            Menu(cliente);
 
         return cliente;
     }
@@ -110,5 +117,25 @@ internal class Program
         Console.WriteLine("| ------------------------------------ |");
 
         Menu(cliente);
+    }
+
+    private static void InformacoesCadastro(Cliente cliente)
+    {
+        cliente.Validacoes = new List<string>();
+        Console.WriteLine("Seu número de identificação:");
+        cliente.SetId(Console.ReadLine());
+
+        Console.WriteLine("Seu nome:");
+        cliente.Nome = Console.ReadLine();
+
+        Console.WriteLine("Seu CPF:");
+        string cpf = Console.ReadLine();
+        bool cpfValido = Cpf.Validar(cpf);
+        cliente.SetCpf(cpfValido, cpf);
+
+
+        Console.WriteLine("Seu Saldo:");
+        cliente.setSaldo(Console.ReadLine());
+        Console.Clear();
     }
 }
