@@ -5,6 +5,8 @@
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Cpf { get; set; }
+        public List<string> Validacoes { get; set; }
+
         public void SetCpf(bool cpfValido,string cpfUsuario)
         {
             if (!cpfValido)
